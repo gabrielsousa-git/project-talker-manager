@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const { readTalkersData } = require('./utils/fsUtils');
+const crypto = require('crypto');
+const { readTalkersData } = require('./utils/handleTalkers');
 
 const app = express();
 app.use(bodyParser.json());
@@ -18,7 +19,7 @@ app.listen(PORT, () => {
   console.log('Online');
 });
 
-app.get('/talker', async (req, res) => {
+app.get('/talker', async (_req, res) => {
   const talkers = await readTalkersData();
   res.status(200).json(talkers);
 });
@@ -32,4 +33,16 @@ app.get('/talker/:id', async (req, res) => {
   if (!talker) return res.status(404).json({ message: 'Pessoa palestrante não encontrada' });
 
   return res.status(200).json(talker);
+});
+
+app.post('/login', async (req, res) => {
+  const { email, password } = req.body;
+
+  const token = crypto.randomBytes(8).toString('hex');
+
+  if (!email || !password) {
+    return res.status(400).json({ message: 'O email e a senha são obrigatórios' });
+  } 
+
+  return res.status(200).json({ token });
 });
