@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const crypto = require('crypto');
 const { readTalkersData } = require('./utils/handleTalkers');
+const { validation } = require('./middlewares/validateLogin');
 
 const app = express();
 app.use(bodyParser.json());
@@ -35,14 +36,8 @@ app.get('/talker/:id', async (req, res) => {
   return res.status(200).json(talker);
 });
 
-app.post('/login', async (req, res) => {
-  const { email, password } = req.body;
-
+app.post('/login', validation, async (req, res) => {
   const token = crypto.randomBytes(8).toString('hex');
-
-  if (!email || !password) {
-    return res.status(400).json({ message: 'O email e a senha são obrigatórios' });
-  } 
 
   return res.status(200).json({ token });
 });
