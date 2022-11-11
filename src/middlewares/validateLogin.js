@@ -19,9 +19,9 @@ const validatePassword = (password, res) => {
 
 const validation = async (req, res, next) => {
   const { email, password } = req.body;
-  validateEmail(email, res);
-  validatePassword(password, res);
-  next();
+  return validateEmail(email, res)
+  || validatePassword(password, res)
+  || next();
 };
 
 module.exports = {

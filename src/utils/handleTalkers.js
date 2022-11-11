@@ -11,6 +11,15 @@ const readTalkersData = async () => {
   }
 };
 
+const addTalker = async (talker) => {
+  const talkers = await readTalkersData();
+  const newTalker = { id: talkers.length + 1, ...talker };
+  talkers.push(newTalker);
+  await fs.writeFile(path.resolve(__dirname, '../talker.json'), JSON.stringify(talkers));
+  return newTalker;
+};
+
 module.exports = {
   readTalkersData,
+  addTalker,
 };
