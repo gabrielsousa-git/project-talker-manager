@@ -6,6 +6,7 @@ const {
   addTalker,
   editTalker,
   deleteTalker,
+  getFilteredTalkers,
 } = require('./utils/handleTalkers');
 const { validation } = require('./middlewares/validateLogin');
 const {
@@ -31,6 +32,16 @@ app.get('/', (_request, response) => {
 
 app.listen(PORT, () => {
   console.log('Online');
+});
+
+app.get('/talker/search', validateToken, async (req, res) => {
+  const { q } = req.query;
+  const talkers = await readTalkersData();
+  if (!q) {
+    return res.status(200).json(talkers);
+  }
+  const filteredTalkers = await getFilteredTalkers(q);
+  return res.status(200).json(filteredTalkers);
 });
 
 app.get('/talker', async (_req, res) => {

@@ -41,9 +41,17 @@ const deleteTalker = async (id) => {
   }
 };
 
+const getFilteredTalkers = async (searchTerm) => {
+  const talkers = await readTalkersData();
+  const filteredTalkers = talkers.filter((t) => t.name.toLowerCase()
+  .includes(searchTerm.toLowerCase()));
+  return filteredTalkers;
+};
+
 module.exports = {
   readTalkersData,
   addTalker,
   editTalker,
   deleteTalker,
+  getFilteredTalkers,
 };
