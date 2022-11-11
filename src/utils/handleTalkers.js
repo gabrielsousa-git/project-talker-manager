@@ -19,7 +19,20 @@ const addTalker = async (talker) => {
   return newTalker;
 };
 
+const editTalker = async (id, talker) => {
+  const talkers = await readTalkersData();
+  const talkerPerson = talkers.find((t) => t.id === id);
+  if (talkerPerson) {
+    const index = talkers.indexOf(talkerPerson);
+    const updated = { id, ...talker };
+    talkers.splice(index, 1, updated);
+    await fs.writeFile(path.resolve(__dirname, '../talker.json'), JSON.stringify(talkers));
+    return updated;
+  }
+};
+
 module.exports = {
   readTalkersData,
   addTalker,
+  editTalker,
 };
