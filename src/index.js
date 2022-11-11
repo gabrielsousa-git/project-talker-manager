@@ -1,7 +1,12 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const crypto = require('crypto');
-const { readTalkersData, addTalker, editTalker } = require('./utils/handleTalkers');
+const {
+  readTalkersData,
+  addTalker,
+  editTalker,
+  deleteTalker,
+} = require('./utils/handleTalkers');
 const { validation } = require('./middlewares/validateLogin');
 const {
   validateToken,
@@ -75,4 +80,10 @@ app.put('/talker/:id',
     const { name, age, talk } = req.body;
     const talker = await editTalker(Number(id), { name, age, talk });
     return res.status(200).json(talker);
+});
+
+app.delete('/talker/:id', validateToken, async (req, res) => {
+  const { id } = req.params;
+  await deleteTalker(Number(id));
+  return res.status(204).send();
 });
